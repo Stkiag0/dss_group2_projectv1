@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block title %}At-Risk Students - Student DSS{% endblock %}
+
+{% block extra_css %}
+<style>
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+    }
+    
+    th {
+        background: #667eea;
+        color: white;
+        padding: 12px;
+        text-align: left;
+        font-weight: 600;
+    }
+    
+    td {
+        padding: 12px;
+        border-bottom: 1px solid #e0e0e0;
+    }
+    
+    tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .view-btn {
+        padding: 6px 12px;
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 4px;
+        font-size: 0.9em;
+    }
+    
+    .view-btn:hover {
+        background: #2980b9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2 style="color: #2c3e50; margin-bottom: 20px;">⚠️ Students Requiring Intervention</h2>
+
+<div style="background: #fff3cd; padding: 15px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #f39c12;">
+    <strong>Total At-Risk Students:</strong> {{ students|length }}
+</div>
+
+<table>
+    <thead>
+        <tr>
+            <th>Student #</th>
+            <th>Risk Level</th>
+            <th>Total Score</th>
+            <th>G2 Grade</th>
+            <th>Absences</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.index }}</td>
+            <td>
+                <span class="risk-{{ student.risk_level|lower|replace(' ', '-') }}">
+                    {{ student.risk_level }}
+                </span>
+            </td>
+            <td>{{ student.total_risk_score }}</td>
+            <td>{{ student.G2 }}</td>
+            <td>{{ student.absences }}</td>
+            <td>
+                <a href="/student/{{ student.index }}" class="view-btn">View Details</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="/" class="back-link">⬅ Back to Home</a>
+{% endblock %}

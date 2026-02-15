@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+
+{% block title %}Input Student Data - Student DSS{% endblock %}
+
+{% block content %}
+<h2 style="color: #2c3e50; margin-bottom: 20px;">Enter Student Information</h2>
+
+<form method="POST" action="/predict">
+    
+    <!-- Academic Performance Section -->
+    <fieldset style="border: 2px solid #e0e0e0; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <legend style="color: #667eea; font-weight: bold; font-size: 1.2em;">📚 Academic Performance</legend>
+        
+        <div class="form-group">
+            <label for="G1">First Period Grade (G1): <small style="color: #7f8c8d;">(0-20)</small></label>
+            <input type="number" id="G1" name="G1" min="0" max="20" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="G2">Second Period Grade (G2): <small style="color: #7f8c8d;">(0-20)</small></label>
+            <input type="number" id="G2" name="G2" min="0" max="20" required>
+        </div>
+        
+        <div class="form-group">
+            <label for="failures">Number of Past Failures: <small style="color: #7f8c8d;">(0-4)</small></label>
+            <input type="number" id="failures" name="failures" min="0" max="4" value="0" required>
+        </div>
+    </fieldset>
+    
+    <!-- Attendance Section -->
+    <fieldset style="border: 2px solid #e0e0e0; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <legend style="color: #667eea; font-weight: bold; font-size: 1.2em;">📅 Attendance</legend>
+        
+        <div class="form-group">
+            <label for="absences">Number of Absences: <small style="color: #7f8c8d;">(0-93)</small></label>
+            <input type="number" id="absences" name="absences" min="0" max="93" value="0" required>
+        </div>
+    </fieldset>
+    
+    <!-- Study Habits Section -->
+    <fieldset style="border: 2px solid #e0e0e0; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <legend style="color: #667eea; font-weight: bold; font-size: 1.2em;">📖 Study Habits</legend>
+        
+        <div class="form-group">
+            <label for="studytime">Weekly Study Time:</label>
+            <select id="studytime" name="studytime" required>
+                <option value="1">&lt; 2 hours</option>
+                <option value="2" selected>2-5 hours</option>
+                <option value="3">5-10 hours</option>
+                <option value="4">&gt; 10 hours</option>
+            </select>
+        </div>
+    </fieldset>
+    
+    <!-- Family Support Section -->
+    <fieldset style="border: 2px solid #e0e0e0; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <legend style="color: #667eea; font-weight: bold; font-size: 1.2em;">👨‍👩‍👧 Family Support</legend>
+        
+        <div class="form-group">
+            <label for="famsup">Family Educational Support:</label>
+            <select id="famsup" name="famsup" required>
+                <option value="yes" selected>Yes</option>
+                <option value="no">No</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="Medu">Mother's Education Level:</label>
+            <select id="Medu" name="Medu" required>
+                <option value="0">None</option>
+                <option value="1">Primary (4th grade)</option>
+                <option value="2" selected>5th-9th grade</option>
+                <option value="3">Secondary education</option>
+                <option value="4">Higher education</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="Fedu">Father's Education Level:</label>
+            <select id="Fedu" name="Fedu" required>
+                <option value="0">None</option>
+                <option value="1">Primary (4th grade)</option>
+                <option value="2" selected>5th-9th grade</option>
+                <option value="3">Secondary education</option>
+                <option value="4">Higher education</option>
+            </select>
+        </div>
+    </fieldset>
+    
+    <!-- Lifestyle Section (Optional) -->
+    <details style="border: 2px solid #e0e0e0; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <summary style="color: #667eea; font-weight: bold; font-size: 1.2em; cursor: pointer;">🎯 Lifestyle Factors (Optional)</summary>
+        
+        <div class="form-group" style="margin-top: 15px;">
+            <label for="goout">Going Out with Friends:</label>
+            <select id="goout" name="goout">
+                <option value="1">Very low</option>
+                <option value="2" selected>Low</option>
+                <option value="3">Medium</option>
+                <option value="4">High</option>
+                <option value="5">Very high</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="Dalc">Workday Alcohol Consumption:</label>
+            <select id="Dalc" name="Dalc">
+                <option value="1" selected>Very low</option>
+                <option value="2">Low</option>
+                <option value="3">Medium</option>
+                <option value="4">High</option>
+                <option value="5">Very high</option>
+            </select>
+        </div>
+        
+        <div class="form-group">
+            <label for="Walc">Weekend Alcohol Consumption:</label>
+            <select id="Walc" name="Walc">
+                <option value="1" selected>Very low</option>
+                <option value="2">Low</option>
+                <option value="3">Medium</option>
+                <option value="4">High</option>
+                <option value="5">Very high</option>
+            </select>
+        </div>
+    </details>
+    
+    <button type="submit">🔍 Analyze Risk Level</button>
+</form>
+
+<div style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
+    <h3 style="color: #2c3e50; margin-bottom: 10px;">ℹ️ About This Analysis</h3>
+    <p style="color: #7f8c8d; line-height: 1.6;">
+        This system uses an expert system with rule-based reasoning to assess student risk across four dimensions:
+        <strong>Academic Performance</strong>, <strong>Attendance</strong>, <strong>Family Support</strong>, and <strong>Lifestyle Factors</strong>.
+        Based on your inputs, the system will provide a risk classification and personalized recommendations.
+    </p>
+</div>
+{% endblock %}

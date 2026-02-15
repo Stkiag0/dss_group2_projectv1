@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Error - Student DSS{% endblock %}
+
+{% block content %}
+<div style="text-align: center; padding: 40px;">
+    <div style="font-size: 5em; margin-bottom: 20px;">⚠️</div>
+    <h2 style="color: #e74c3c; margin-bottom: 20px;">Oops! Something Went Wrong</h2>
+    <div style="background: #fef5f5; padding: 20px; border-radius: 8px; border-left: 4px solid #e74c3c; margin: 20px 0;">
+        <p style="color: #2c3e50; line-height: 1.6;">{{ message }}</p>
+    </div>
+    <a href="/" style="display: inline-block; padding: 12px 30px; background: #667eea; color: white; 
+       text-decoration: none; border-radius: 8px; font-weight: 600; margin-top: 20px;">
+        ⬅ Return Home
+    </a>
+</div>
+{% endblock %}
