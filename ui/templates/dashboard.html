@@ -1,0 +1,174 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Student DSS{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stats-container {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin: 30px 0;
+    }
+    
+    .stat-card {
+        background: white;
+        padding: 25px;
+        border-radius: 10px;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        text-align: center;
+        border-left: 5px solid;
+    }
+    
+    .stat-card.total { border-left-color: #3498db; }
+    .stat-card.high { border-left-color: #e74c3c; }
+    .stat-card.moderate { border-left-color: #f39c12; }
+    .stat-card.low { border-left-color: #27ae60; }
+    
+    .stat-number {
+        font-size: 3em;
+        font-weight: bold;
+        margin: 10px 0;
+    }
+    
+    .stat-label {
+        color: #7f8c8d;
+        font-size: 1.1em;
+    }
+    
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+        background: white;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+    
+    th {
+        background: #2c3e50;
+        color: white;
+        padding: 15px;
+        text-align: left;
+    }
+    
+    td {
+        padding: 12px 15px;
+        border-bottom: 1px solid #ecf0f1;
+    }
+    
+    tr:hover {
+        background: #f8f9fa;
+    }
+    
+    .view-btn {
+        padding: 8px 16px;
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 0.9em;
+        transition: background 0.3s;
+    }
+    
+    .view-btn:hover {
+        background: #2980b9;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h2 style="color: #2c3e50; margin-bottom: 30px;">📊 Student Risk Dashboard</h2>
+
+<!-- Summary Statistics -->
+<div class="stats-container">
+    <div class="stat-card total">
+        <div class="stat-label">Total Students</div>
+        <div class="stat-number" style="color: #3498db;">{{ stats.total_students }}</div>
+    </div>
+    
+    <div class="stat-card high">
+        <div class="stat-label">High Risk</div>
+        <div class="stat-number" style="color: #e74c3c;">{{ stats.high_risk }}</div>
+        <div style="color: #7f8c8d; font-size: 0.9em;">{{ stats.high_risk_pct }}%</div>
+    </div>
+    
+    <div class="stat-card moderate">
+        <div class="stat-label">Moderate Risk</div>
+        <div class="stat-number" style="color: #f39c12;">{{ stats.moderate_risk }}</div>
+        <div style="color: #7f8c8d; font-size: 0.9em;">{{ stats.moderate_risk_pct }}%</div>
+    </div>
+    
+    <div class="stat-card low">
+        <div class="stat-label">Low Risk</div>
+        <div class="stat-number" style="color: #27ae60;">{{ stats.low_risk }}</div>
+        <div style="color: #7f8c8d; font-size: 0.9em;">{{ stats.low_risk_pct }}%</div>
+    </div>
+</div>
+
+<!-- Top At-Risk Students -->
+<div style="margin-top: 40px;">
+    <h3 style="color: #2c3e50; margin-bottom: 20px;">⚠️ Top 10 Students Requiring Attention</h3>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Student #</th>
+                <th>Risk Level</th>
+                <th>Risk Score</th>
+                <th>G2 Grade</th>
+                <th>Absences</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if at_risk|length > 0 %}
+                {% for student in at_risk %}
+                <tr>
+                    <td><strong>{{ student.index }}</strong></td>
+                    <td>
+                        <span class="risk-{{ student.risk_level|lower|replace(' ', '-') }}">
+                            {{ student.risk_level }}
+                        </span>
+                    </td>
+                    <td>{{ student.total_risk_score }}</td>
+                    <td>{{ student.G2 }}</td>
+                    <td>{{ student.absences }}</td>
+                    <td>
+                        <a href="/student/{{ student.index }}" class="view-btn">View Details</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="6" style="text-align: center; padding: 30px; color: #7f8c8d;">
+                        🎉 No at-risk students found!
+                    </td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+    
+    {% if at_risk|length > 0 %}
+    <div style="margin-top: 20px; text-align: center;">
+        <a href="/at-risk" class="view-btn" style="display: inline-block; padding: 12px 30px;">
+            View All At-Risk Students →
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Quick Actions -->
+<div style="margin-top: 40px; padding: 25px; background: #f8f9fa; border-radius: 10px;">
+    <h3 style="color: #2c3e50; margin-bottom: 15px;">🚀 Quick Actions</h3>
+    <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+        <a href="/" style="padding: 12px 25px; background: #667eea; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+            📝 Analyze New Student
+        </a>
+        <a href="/at-risk" style="padding: 12px 25px; background: #e74c3c; color: white; text-decoration: none; border-radius: 8px; font-weight: 600;">
+            ⚠️ View All At-Risk
+        </a>
+    </div>
+</div>
+{% endblock %}

@@ -56,7 +56,7 @@ def evaluate_student(form_data):
     })
     
     # Import your evaluation function
-    from logic.decision_rules import evaluate_risk
+    from logic.desicion_rules import evaluate_risk
     
     # Run through expert system
     risk_level, recommendations, risk_scores = evaluate_risk(student_row)
