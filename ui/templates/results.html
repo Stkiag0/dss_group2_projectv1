@@ -1,192 +1,46 @@
-{% extends "base.html" %}
-
-{% block title %}Risk Assessment Results - Student DSS{% endblock %}
-
-{% block extra_css %}
-<style>
-    .results-card {
-        background: #f8f9fa;
-        padding: 25px;
-        border-radius: 10px;
-        margin-bottom: 25px;
-        border-left: 5px solid;
-    }
+<!-- Main Centered Container -->
+<div style="display: flex; justify-content: center; align-items: center; padding: 40px; background: linear-gradient(135deg, #4b1a7a 0%, #764ba2 100%); min-height: 400px; border-radius: 15px; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
     
-    .results-card.high {
-        border-left-color: #e74c3c;
-        background: #fef5f5;
-    }
-    
-    .results-card.moderate {
-        border-left-color: #f39c12;
-        background: #fef9f3;
-    }
-    
-    .results-card.low {
-        border-left-color: #27ae60;
-        background: #f0fdf4;
-    }
-    
-    .metric {
-        display: inline-block;
-        padding: 10px 20px;
-        background: white;
-        border-radius: 8px;
-        margin: 10px 10px 10px 0;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    .metric-label {
-        font-size: 0.9em;
-        color: #7f8c8d;
-        display: block;
-    }
-    
-    .metric-value {
-        font-size: 1.5em;
-        font-weight: bold;
-        color: #2c3e50;
-    }
-    
-    .recommendations {
-        background: #fff3cd;
-        padding: 20px;
-        border-radius: 8px;
-        border-left: 4px solid #f39c12;
-    }
-    
-    .recommendations li {
-        margin: 10px 0;
-        line-height: 1.6;
-    }
-    
-    .score-breakdown {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-        gap: 15px;
-        margin: 20px 0;
-    }
-    
-    .score-item {
-        background: white;
-        padding: 15px;
-        border-radius: 8px;
-        text-align: center;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-    
-    .score-item-label {
-        font-size: 0.9em;
-        color: #7f8c8d;
-        margin-bottom: 5px;
-    }
-    
-    .score-item-value {
-        font-size: 2em;
-        font-weight: bold;
-        color: #667eea;
-    }
-</style>
-{% endblock %}
-
-{% block content %}
-<h2 style="color: #2c3e50; margin-bottom: 30px;">📊 Risk Assessment Results</h2>
-
-<!-- Risk Level Card -->
-<div class="results-card {{ level|lower|replace(' ', '-') }}">
-    <h3 style="margin-bottom: 15px;">Risk Classification</h3>
-    <div style="font-size: 2em; font-weight: bold;" 
-         class="risk-{{ level|lower|replace(' ', '-') }}">
-        {{ level }}
-    </div>
-</div>
-
-<!-- Key Metrics -->
-<div style="margin-bottom: 30px;">
-    <h3 style="color: #2c3e50; margin-bottom: 15px;">Key Metrics</h3>
-    
-    <div class="metric">
-        <span class="metric-label">Total Risk Score</span>
-        <div class="metric-value">{{ score }}/15</div>
-    </div>
-    
-    <div class="metric">
-        <span class="metric-label">Failure Probability</span>
-        <div class="metric-value" style="color: #e74c3c;">{{ probability }}%</div>
-    </div>
-</div>
-
-<!-- Score Breakdown -->
-<div style="margin-bottom: 30px;">
-    <h3 style="color: #2c3e50; margin-bottom: 15px;">Score Breakdown</h3>
-    <div class="score-breakdown">
-        <div class="score-item">
-            <div class="score-item-label">Academic (APS)</div>
-            <div class="score-item-value">{{ risk_scores.APS }}</div>
+    <!-- Analysis Card -->
+    <div style="background: rgba(255, 255, 255, 0.95); padding: 30px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.2); width: 100%; max-width: 500px; text-align: center;">
+        
+        <!-- Mode Badge (Top) -->
+        <div style="margin-bottom: 25px;">
+            {% if mode == 'hybrid' %}
+            <span style="background: #9b59b6; color: white; padding: 6px 20px; border-radius: 50px; font-size: 0.85em; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">
+                🤖 Hybrid Mode
+            </span>
+            {% else %}
+            <span style="background: #27ae60; color: white; padding: 6px 20px; border-radius: 50px; font-size: 0.85em; font-weight: 700; letter-spacing: 1px; text-transform: uppercase;">
+                📋 Rules Only
+            </span>
+            {% endif %}
         </div>
-        <div class="score-item">
-            <div class="score-item-label">Attendance (ARS)</div>
-            <div class="score-item-value">{{ risk_scores.ARS }}</div>
-        </div>
-        <div class="score-item">
-            <div class="score-item-label">Family (FSR)</div>
-            <div class="score-item-value">{{ risk_scores.FSR }}</div>
-        </div>
-        <div class="score-item">
-            <div class="score-item-label">Lifestyle (LRS)</div>
-            <div class="score-item-value">{{ risk_scores.LRS }}</div>
+
+        <h3 style="color: #2c3e50; margin-top: 0; font-weight: 700;">Student Risk Analysis</h3>
+        
+        <!-- Metrics Grid -->
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 25px;">
+            
+            <!-- Risk Score -->
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; border-left: 5px solid #4b1a7a;">
+                <span style="font-size: 0.8em; color: #7f8c8d; text-transform: uppercase; font-weight: 600;">Total Score</span>
+                <div style="font-size: 1.5em; font-weight: 800; color: #2c3e50;">{{ score }}<span style="font-size: 0.6em; color: #bdc3c7;">/15</span></div>
+            </div>
+            
+            <!-- Failure Prob -->
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 12px; border-left: 5px solid #e74c3c;">
+                <span style="font-size: 0.8em; color: #7f8c8d; text-transform: uppercase; font-weight: 600;">Failure Prob.</span>
+                <div style="font-size: 1.5em; font-weight: 800; color: #e74c3c;">{{ probability }}%</div>
+            </div>
+
+            <!-- ML Metric (Spans full width if present) -->
+            {% if mode == 'hybrid' and ml_available %}
+            <div style="grid-column: span 2; background: #f3ebff; padding: 15px; border-radius: 12px; border: 1px dashed #9b59b6;">
+                <span style="font-size: 0.8em; color: #9b59b6; text-transform: uppercase; font-weight: 700;">Machine Learning Prediction</span>
+                <div style="font-size: 1.8em; font-weight: 800; color: #764ba2;">{{ (risk_scores['ML Probability'])|round(1) }}%</div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
-
-<!-- Recommendations -->
-<div class="recommendations">
-    <h3 style="margin-bottom: 15px;">💡 Recommended Actions</h3>
-    <ul style="padding-left: 20px;">
-        {% for rec in recommendations %}
-        <li>{{ rec }}</li>
-        {% endfor %}
-    </ul>
-</div>
-
-<!-- Action Buttons -->
-<div style="margin-top: 30px; text-align: center;">
-    <a href="/" style="display: inline-block; padding: 12px 30px; background: #667eea; color: white; 
-       text-decoration: none; border-radius: 8px; margin: 5px; font-weight: 600;">
-        ⬅ Analyze Another Student
-    </a>
-    <a href="/dashboard" style="display: inline-block; padding: 12px 30px; background: #27ae60; color: white; 
-       text-decoration: none; border-radius: 8px; margin: 5px; font-weight: 600;">
-        📊 View Dashboard
-    </a>
-</div>
-
-<!-- Student Data Summary (Collapsible) -->
-<details style="margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px;">
-    <summary style="cursor: pointer; font-weight: bold; color: #2c3e50;">
-        📋 View Complete Student Data
-    </summary>
-    <div style="margin-top: 15px;">
-        <table style="width: 100%; border-collapse: collapse;">
-            <tr>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;"><strong>G1 Grade:</strong></td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;">{{ student_data.G1 }}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;"><strong>G2 Grade:</strong></td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;">{{ student_data.G2 }}</td>
-            </tr>
-            <tr>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;"><strong>Absences:</strong></td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;">{{ student_data.absences }}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;"><strong>Study Time:</strong></td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;">{{ student_data.studytime }}</td>
-            </tr>
-            <tr>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;"><strong>Failures:</strong></td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;">{{ student_data.failures }}</td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;"><strong>Family Support:</strong></td>
-                <td style="padding: 8px; border-bottom: 1px solid #e0e0e0;">{{ student_data.famsup }}</td>
-            </tr>
-        </table>
-    </div>
-</details>
-{% endblock %}

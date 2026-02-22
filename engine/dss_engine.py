@@ -16,7 +16,7 @@ sys.path.insert(0, project_root)
 print(f"Debug: Project root = {project_root}")
 print(f"Debug: Looking for logic folder at: {os.path.join(project_root, 'logic')}")
 
-from logic.desicion_rules import evaluate_risk
+from logic.decision_rules import evaluate_risk
 
 class StudentDSS:
     def __init__(self, data_path):
